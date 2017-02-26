@@ -1,0 +1,61 @@
+% alpha=4;
+% alpha=3.9;
+alpha=3.8;
+yita=0.6;
+epslon=0.3;
+% epslon=0.4;
+%%%%%%%%%%%%%%%
+p=1;
+q=3;
+M=2;
+%%%%%%%%%%%%%%%%
+
+lattice=100;
+times=512*512;
+digits(14);
+cs=zeros(lattice,times);
+ks=cs;
+cs_cml=zeros(lattice,times);
+c=zeros(1,lattice);
+% c(1)=0.40565487923280;
+ c(1)=0.30565487923280;
+  for i=2:lattice*4
+     c(i)=alpha*c(i-1)*(1-c(i-1));
+ end
+ for i=1:lattice    
+        cs(i,1)=c(i*3);
+         cs_cml(i,1)=c(i*3);
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%arnold %%%%%%%%%%%%%%%%%%%%%%
+
+for n=2:times
+    for i=1:lattice    
+%     x=mod(((i-1)+p*(i+1)),lattice);
+%     y=mod(q*(i-1)+(p*q+1)*(i+1),lattice);
+ x=mod(((i)+p*(i)),lattice);
+    y=mod(q*(i)+(p*q+1)*(i),lattice);
+        if x==0
+            x=lattice;
+        end
+        if y==lattice+1
+            y=1;
+        end
+        if y==0
+            y=lattice;
+        end
+        if x==lattice+1
+            x=1;
+        end
+         xx=i-1;
+    yy=i+1;
+    if xx==0
+        xx=lattice;
+    end
+    if yy==lattice+1
+        yy=1;
+    end
+cs(i,n)=(1-epslon)*alpha*cs(i,n-1)*(1-cs(i,n-1)) +(1-yita)*((epslon/2)*(    alpha*cs(xx,n-1)*(1-cs(xx,n-1))   +    alpha*cs(yy,n-1)*(1-cs(yy,n-1))     ))+yita*(epslon/2)*(    alpha*cs(x,n-1)*(1-cs(x,n-1))   +    alpha*cs(y,n-1)*(1-cs(y,n-1))     );  
+
+   end
+   
+end
